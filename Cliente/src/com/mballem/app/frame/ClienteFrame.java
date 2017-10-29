@@ -5,7 +5,15 @@
  */
 package com.mballem.app.frame;
 
+import com.mballem.app.bean.ChatMenssage;
+import com.mballem.app.bean.ChatMenssage.Action;
+import com.mballem.app.service.ClienteService;
 import java.awt.SystemColor;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
@@ -17,14 +25,68 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author Administrador
  */
 public class ClienteFrame extends javax.swing.JFrame {
-
+    
+    
+    private Socket socket;
+    private ChatMenssage menssage;
+    private ClienteService service;
     /**
      * Creates new form ClienteFrame
      */
     public ClienteFrame() {
         initComponents();
     }
+    
+    private class ListenerSocket implements Runnable{
 
+        private ObjectInputStream input;
+        
+        public ListenerSocket(Socket socket){
+            try {
+                this.input = new ObjectInputStream(socket.getInputStream());
+            } catch (IOException ex) {
+                Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
+        @Override
+        public void run() {
+            ChatMenssage menssage = null;
+            try {
+                while ((menssage = (ChatMenssage)input.readObject()) != null){
+                    Action action = menssage.getAction();
+                    
+                    if(action.equals(Action.CONNECT)){
+                        connect(menssage);
+                    }else if(action.equals(Action.DISCONNCT)){
+                        disconnect(menssage);
+                    } else if (action.equals(Action.SEND_ONE)) {
+                        sendOne(menssage);
+                    } else if (action.equals(Action.USERS_ONLINE )) {
+                        refreshOnlines(menssage);
+                    }
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+    }
+    private void connect(ChatMenssage menssage){
+        
+    }
+    private void disconnect(ChatMenssage menssage){
+        
+    }
+    private void sendOne(ChatMenssage menssage){
+        
+    }
+    private void refreshOnlines(ChatMenssage menssage){
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -70,10 +132,20 @@ public class ClienteFrame extends javax.swing.JFrame {
         btnConnectar.setBackground(new java.awt.Color(0, 255, 0));
         btnConnectar.setFont(new java.awt.Font("Arial Narrow", 0, 14)); // NOI18N
         btnConnectar.setText("Connectar");
+        btnConnectar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConnectarActionPerformed(evt);
+            }
+        });
 
         btnSair.setBackground(new java.awt.Color(255, 51, 51));
         btnSair.setFont(new java.awt.Font("Arial Narrow", 0, 14)); // NOI18N
         btnSair.setText("Sair");
+        btnSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -114,6 +186,11 @@ public class ClienteFrame extends javax.swing.JFrame {
 
         btnEnviar.setFont(new java.awt.Font("Arial Narrow", 0, 14)); // NOI18N
         btnEnviar.setText("Enviar");
+        btnEnviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnviarActionPerformed(evt);
+            }
+        });
 
         btnLimpar.setFont(new java.awt.Font("Arial Narrow", 0, 14)); // NOI18N
         btnLimpar.setText("Limpar");
@@ -238,6 +315,18 @@ public class ClienteFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
       
     }//GEN-LAST:event_formWindowOpened
+
+    private void btnConnectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnectarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnConnectarActionPerformed
+
+    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSairActionPerformed
+
+    private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEnviarActionPerformed
 
     /**
      * @param args the command line arguments
