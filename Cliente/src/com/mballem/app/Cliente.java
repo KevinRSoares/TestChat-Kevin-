@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mbalem.app;
+package com.mballem.app;
 
 /**
  *
- * @author Kevin
+ * @author Administrador
  */
 public class Cliente {
 
