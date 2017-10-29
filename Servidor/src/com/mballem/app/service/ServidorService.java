@@ -26,7 +26,6 @@ public class ServidorService {
     private ServerSocket serverSocket;
     private Socket socket;
     private Map<String, ObjectOutputStream> mapOnlines = new HashMap<String, ObjectOutputStream>();
-
     public ServidorService() {
         try {
             serverSocket = new ServerSocket(5555);
